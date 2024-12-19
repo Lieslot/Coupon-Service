@@ -1,5 +1,3 @@
-
-
 class CouponError < StandardError
   def initialize(message = 'Coupon exception occurred')
     super(message)
@@ -7,9 +5,9 @@ class CouponError < StandardError
 end
 
 class CouponNotFound < CouponError
-    def initialize(coupon_id, user_id)
-      super("Coupon not found; coupon: #{coupon_id} user: #{user_id}")
-    end
+  def initialize(coupon_id, user_id)
+    super("Coupon not found; coupon: #{coupon_id} user: #{user_id}")
+  end
 end
 
 class CouponSoldOut < CouponError

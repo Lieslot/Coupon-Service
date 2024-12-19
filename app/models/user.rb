@@ -10,8 +10,7 @@
 # t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 class User < ApplicationRecord
-
-  enum role: { user: 0, admin: 1, guest: 2}
+  enum role: { user: 0, admin: 1, guest: 2 }
 
   has_many :coupon_wallets, dependent: :destroy
 
@@ -27,5 +26,4 @@ class User < ApplicationRecord
   def set_default_role
     self.role ||= :guest
   end
-
 end

@@ -1,9 +1,7 @@
-
-
 class CouponError < StandardError
-    def initialize(message = "coupon error occured")
-      super(message)
-    end
+  def initialize(message = 'coupon error occured')
+    super(message)
+  end
 end
 
 class CouponNotFound < CouponError

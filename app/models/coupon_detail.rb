@@ -2,11 +2,8 @@ class CouponDetail < ApplicationRecord
   acts_as_paranoid
 
   def sold_out?
-      if self.amount < 0
-          Rails.logger.error("coupon amount is negative; coupon: #{self.id}")
-      end
+    Rails.logger.error("coupon amount is negative; coupon: #{id}") if amount < 0
 
-      return self.amount <= 0 
+    amount <= 0
   end
-
 end
