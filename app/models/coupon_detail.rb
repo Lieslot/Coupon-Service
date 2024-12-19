@@ -1,0 +1,3 @@
+class CouponDetail < ApplicationRecord
+  
+end
