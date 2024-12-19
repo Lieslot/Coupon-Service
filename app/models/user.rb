@@ -1,5 +1,3 @@
-
-
 # t.string "email", default: "", null: false
 # t.string "encrypted_password", default: "", null: false
 # t.string "reset_password_token"
@@ -11,11 +9,23 @@
 # t.index ["email"], name: "index_users_on_email", unique: true
 # t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
-
 class User < ApplicationRecord
-    devise :database_authenticatable, :registerable,
+
+  enum role: { user: 0, admin: 1, guest: 2}
+
+  has_many :coupon_wallets, dependent: :destroy
+
+
+  after_initialize :set_default_role, if: :new_record?
+
+  acts_as_paranoid
+
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-    
-    has_many :coupon_wallets, dependent: :destroy
+
+
+  def set_default_role
+    self.role ||= :guest
+  end
 
 end

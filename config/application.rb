@@ -12,6 +12,8 @@ module TicketService
 
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # config.autoload_paths << Rails.root.join('app/errors')
+
     config.generators do |g|
       g.helper false
       g.assets false
