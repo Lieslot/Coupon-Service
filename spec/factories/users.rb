@@ -9,7 +9,6 @@ FactoryBot.define do
     trait :admin do
       role { :admin }
     end
-
     trait :guest do
       role { :guest }
     end

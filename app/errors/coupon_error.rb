@@ -3,7 +3,3 @@ class CouponError < StandardError
     super(message)
   end
 end
-
-
-
-

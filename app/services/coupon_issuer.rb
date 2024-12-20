@@ -5,8 +5,9 @@ class CouponIssuer
 
     ActiveRecord::Base.transaction do
       expire_date = Time.current + coupon.duration_day.days
-      puts "expire_date: #{expire_date}"
-      user_coupon =  CouponWallet.find_by(user_id: user.id, coupon_id: coupon.id, expire_date: expire_date)
+      user_coupon = CouponWallet.lock.find_by(user_id: user.id, coupon_id: coupon.id, expire_date: expire_date)
+
+
       if user_coupon.nil?
 
         CouponWallet.create!(
@@ -19,14 +20,15 @@ class CouponIssuer
         user_coupon.increment!(:amount)
       end
 
-        coupon.decrement!(:amount)
-
+      coupon.lock!
+      coupon.decrement!(:amount)
     end
     coupon.amount
   end
 
   private
+
   def exceed_max_per_user?(coupon, user)
-    return coupon.max_amount_per_user <= CouponWallet.where(user_id: user.id, coupon_id: coupon.id).sum(:amount)
+    coupon.max_amount_per_user <= CouponWallet.where(user_id: user.id, coupon_id: coupon.id).sum(:amount)
   end
 end
