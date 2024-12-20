@@ -1,0 +1,14 @@
+
+
+<% @coupon_wallets.each do |coupon|%>
+
+<div data-id="<%= coupon.id %>">
+    <h3><%= coupon.coupon_detail.name %></h3>
+    <p>Discount Value: <%= coupon.coupon_detail.discount_value%><p>
+    <p class="coupon-amount">Amount: <%= coupon.amount %></p>
+    <p> expire date: <%= coupon.expire_date %></p>
+</div>
+
+<br/>
+
+<% end %>

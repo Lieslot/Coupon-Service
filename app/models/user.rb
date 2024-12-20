@@ -26,12 +26,8 @@ class User < ApplicationRecord
 
 
   def set_default_role
-
-    puts self.id
-
+    
     return self.role = :admin if self.id == 1
-
-  
 
     self.role ||= :guest
   end

@@ -15,6 +15,11 @@ class CouponController < ApplicationController
     head :unauthorized
   end
 
+  def coupon_params
+    params.require(:coupon_detail).permit(:name, :amount, :max_amount_per_user, :discount_value, :duration_day)
+  end
+
+
   def new
     @coupon_detail = CouponDetail.new
     render '/coupon/new_coupon'
@@ -27,15 +32,13 @@ class CouponController < ApplicationController
     redirect_to list_coupons_path
   end
 
-  def coupon_params
-    params.require(:coupon_detail).permit(:name, :amount, :max_amount_per_user, :discount_value, :duration_day)
-  end
-
+  #TODO paging
   def index
     @coupon_details = CouponDetail.all
     render 'coupon/list'
   end
 
+  # TODO paging
   def wallet
     @coupon_wallets = CouponWallet.where(user_id: current_user.id).includes(:coupon_detail)
     render 'coupon/wallet'
