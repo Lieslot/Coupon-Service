@@ -15,16 +15,13 @@ class CouponController < ApplicationController
     head :unauthorized
   end
 
-  # TODO: 새로운 쿠폰 생성 화면
   def new
-    # TODO: 화면 만들기기
     @coupon_detail = CouponDetail.new
     render '/coupon/new_coupon'
   end
 
   def create
     
-  
     @coupon_detail = CouponDetail.create!(coupon_params)
 
     redirect_to list_coupons_path
@@ -34,15 +31,14 @@ class CouponController < ApplicationController
     params.require(:coupon_detail).permit(:name, :amount, :max_amount_per_user, :discount_value, :duration_day)
   end
 
-  # TODO: 유저가 발급 가능한 쿠폰 목록 조회 화면
   def index
     @coupon_details = CouponDetail.all
     render 'coupon/list'
   end
 
-  # TODO: 유저가 사용 가능한 쿠폰 조회 화면(쿠폰 지갑)
   def wallet
-    render wallet_coupons_path
+    @coupon_wallets = CouponWallet.where(user_id: current_user.id).includes(:coupon_detail)
+    render 'coupon/wallet'
   end
 
   def issue
@@ -51,10 +47,12 @@ class CouponController < ApplicationController
       left_coupon_amount = CouponIssuer.new.issue(current_user, coupon)
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Validation error: #{e.message}")
-      return head :unprocessable_entity
+      render json: {message: e.message}, status: :unprocessable_entity
+      return 
     rescue StandardError => e
       Rails.logger.error("Failed to issue coupon: #{e.message}")
-      return head :unprocessable_entity
+      render json: {message: e.message}, status: :internal_server_error
+      return
     end
 
     render json: { message: 'Coupon issued successfully', left_amount: left_coupon_amount }, status: :ok
