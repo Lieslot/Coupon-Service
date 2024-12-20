@@ -1,0 +1,65 @@
+
+
+<% @coupon_details.each do |coupon| %>
+
+    <div data-id = "<%= coupon.id %>">
+        
+        <h3><%= coupon.name %></h3>
+        <p class='coupon-amount'>Amount: <%= coupon.amount %></p>
+        <p>Max Amount Per User: <%= coupon.max_amount_per_user %></p>
+        <p>Discount Value: <%= coupon.discount_value %></p>
+        <p>Duration (in Days): <%= coupon.duration_day %></p>
+
+        <button class="coupon-issue">issue</button>
+    </div>
+
+<% end %>
+
+
+<script type="module" >
+
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+    
+    async function postRequest(url, data) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCsrfToken(),
+            },
+            body: JSON.stringify(data),
+        });
+        return response;
+    }
+    
+    async function handleCouponIssue(event) {
+        const button = event.target;
+        const couponId = button.closest('div[data-id]').getAttribute('data-id');
+        const url = "<%= url_for(controller: 'coupon', action: 'issue', only_path: true) %>";
+    
+        try {
+            const response = await postRequest(url, { coupon_id: couponId });
+    
+            if (response.ok) {
+                const data = await response.json();
+                const leftAmount = data.left_amount;
+    
+                document.querySelector(`div[data-id="${couponId}"] .coupon-amount`).innerText = `Amount: ${leftAmount}`;
+    
+                alert('Coupon Issued');
+            } else {
+                alert('Failed to issue coupon');
+            }
+        } catch (error) {
+            console.error('Error issuing coupon:', error);
+            alert('An unexpected error occurred');
+        }
+    }
+    
+    document.querySelectorAll('.coupon-issue').forEach((button) => {
+        button.addEventListener('click', handleCouponIssue);
+    });
+    
+</script>

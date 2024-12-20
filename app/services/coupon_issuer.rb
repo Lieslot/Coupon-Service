@@ -12,5 +12,6 @@ class CouponIssuer
       )
       coupon.decrement!(:amount)
     end
+    coupon.amount
   end
 end

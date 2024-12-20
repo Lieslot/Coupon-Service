@@ -1,0 +1,33 @@
+<h1>Create a New Coupon</h1>
+
+
+<%= form_with model: @coupon_detail, url: coupons_path, method: :post, local: true do |f| %>
+  <div>
+    <%= f.label :name, "Name" %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :amount, "Amount" %>
+    <%= f.text_field :amount, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :max_amount_per_user, "Max Amount Per User" %>
+    <%= f.number_field :max_amount_per_user, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :discount_value, "Discount Value" %>
+    <%= f.number_field :discount_value, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :duration_day, "Duration (in Days)" %>
+    <%= f.number_field :duration_day %>
+  </div>
+
+  <div>
+    <%= f.submit "Create Coupon" %>
+  </div>
+<% end %>

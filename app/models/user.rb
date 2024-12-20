@@ -14,6 +14,8 @@ class User < ApplicationRecord
 
   has_many :coupon_wallets, dependent: :destroy
 
+  before_create :set_default_role
+
 
   after_initialize :set_default_role, if: :new_record?
 
@@ -24,6 +26,16 @@ class User < ApplicationRecord
 
 
   def set_default_role
+
+    puts self.id
+
+    return self.role = :admin if self.id == 1
+
+  
+
     self.role ||= :guest
   end
+
+
+
 end
