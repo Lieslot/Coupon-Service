@@ -49,10 +49,6 @@ class CouponController < ApplicationController
       Rails.logger.error("Validation error: #{e.message}")
       render json: {message: e.message}, status: :unprocessable_entity
       return 
-    rescue StandardError => e
-      Rails.logger.error("Failed to issue coupon: #{e.message}")
-      render json: {message: e.message}, status: :internal_server_error
-      return
     end
 
     render json: { message: 'Coupon issued successfully', left_amount: left_coupon_amount }, status: :ok

@@ -49,8 +49,17 @@
                 document.querySelector(`div[data-id="${couponId}"] .coupon-amount`).innerText = `Amount: ${leftAmount}`;
     
                 alert('Coupon Issued');
-            } else {
-                alert('Failed to issue coupon');
+            } 
+            
+            else if (response.unprocessable_entity) {
+                const error = await response.json();
+                console.log('response:', error.message);
+                alert('You are not authorized to issue this coupon');
+            }
+
+            else {
+                const error = await response.json();
+                alert(error.message);
             }
         } catch (error) {
             console.error('Error issuing coupon:', error);
