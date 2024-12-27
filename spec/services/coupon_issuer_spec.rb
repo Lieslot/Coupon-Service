@@ -21,13 +21,13 @@ RSpec.describe CouponIssuer do
   describe '#issue' do
     it 'should issue coupon' do
       @coupon = create(:coupon_detail, amount: 10, duration_day: 10)
+
       CouponIssuer.new.issue(user.id, @coupon)
-      expect(CouponDetail.find_by(id: @coupon.id).amount).to eq(9)
+      expect(CouponReader.new.read(@coupon.id).amount).to eq(9)
     end
   end
 
   describe 'asynchronous test' do
-    self.use_transactional_tests = false
     let(:users) { create_list(:user, TEST_COUNT) }
 
     TEST_COUNT = 100
@@ -57,7 +57,7 @@ RSpec.describe CouponIssuer do
 
       latch.wait
       expect(CouponWallet.count).to eq(TEST_COUNT)
-      expect(CouponDetail.find_by(id: coupon.id).amount).to eq(10_000 - TEST_COUNT)
+      expect(CouponReader.new.read(coupon.id).amount).to eq(10_000 - TEST_COUNT)
 
       executor.shutdown
       executor.wait_for_termination

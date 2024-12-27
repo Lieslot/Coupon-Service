@@ -2,7 +2,7 @@ class CouponIssuer
   include Retryable
 
   def issue(user_id, coupon)
-    raise CouponSoldOut.new(coupon.id, user_id) if coupon.sold_out?
+    raise CouponSoldOut.new(coupon.id, user_id) if sold_out?(coupon)
     raise ExceededMaxAmountPerUser.new(coupon.id, user_id) if exceed_max_per_user?(coupon, user_id)
 
     ActiveRecord::Base.transaction do
@@ -36,5 +36,9 @@ class CouponIssuer
 
   def exceed_max_per_user?(coupon, user_id)
     coupon.max_amount_per_user <= CouponWallet.where(user_id: user_id, coupon_id: coupon.id).sum(:amount)
+  end
+
+  def sold_out?(coupon)
+    CouponReader.new.read(coupon.id).amount <= 0
   end
 end

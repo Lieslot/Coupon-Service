@@ -48,9 +48,9 @@ RSpec.describe 'Coupons', type: :request do
       it 'should issue coupon' do
         sign_in user
 
-        post '/coupons/issue', params: { coupon_id: coupon.id }
+        post issue_coupons_path, params: { coupon_id: coupon.id }
 
-        expect(CouponDetail.find_by(id: coupon.id).amount).to eq(9)
+        expect(CouponReader.new.read(coupon.id).amount).to eq(9)
       end
     end
   end

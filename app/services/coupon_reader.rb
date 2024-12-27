@@ -7,13 +7,13 @@ class CouponReader
   end
 
   def read(coupon_id)
-
     coupon = CouponDetail.find_by(id: coupon_id)
     raise CouponNotFound.new(coupon_id, nil) if coupon.nil?
 
     left_amount = Rails.cache.fetch("coupon_amount_#{coupon_id}") do
       coupon.amount - CouponPurchase.where(coupon_id: coupon.id).count
     end
+
 
     CouponDto.new(coupon, left_amount)
   end

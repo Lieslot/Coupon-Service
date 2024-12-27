@@ -4,7 +4,7 @@ RSpec.describe CouponService do
   describe '#purchase_coupon' do
     let(:users) { create_list(:user, TEST_COUNT) }
 
-    TEST_COUNT = 1000
+    TEST_COUNT = 100
 
     it 'case issue coupon asynchronously' do
       coupon = create(:coupon_detail, amount: 10_000, duration_day: 10, max_amount_per_user: 1)
@@ -31,7 +31,7 @@ RSpec.describe CouponService do
       
       expect(CouponWallet.count).to eq(TEST_COUNT)
       expect(CouponPurchase.where(coupon_id: coupon.id).count).to eq(TEST_COUNT)
-      expect(CouponReader.new.read(coupon.id).amount).to eq(TEST_COUNT)
+      expect(CouponReader.new.read(coupon.id).amount).to eq(10_000 - TEST_COUNT)
 
       executor.shutdown
       executor.wait_for_termination

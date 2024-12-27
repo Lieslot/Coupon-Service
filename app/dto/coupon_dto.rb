@@ -4,7 +4,7 @@ class CouponDto
   def initialize(coupon, amount)
     @id = coupon.id
     @name = coupon.name
-    @amount = coupon.amount - amount
+    @amount = amount
     @duration_day = coupon.duration_day
   end
 end
