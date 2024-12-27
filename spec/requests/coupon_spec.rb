@@ -12,8 +12,8 @@ RSpec.describe 'Coupons', type: :request do
   #     latch = Concurrent::CountDownLatch.new(100)
 
   #     executor = Concurrent::ThreadPoolExecutor.new(
-  #       min_threads: 1,
-  #       max_threads: 1,
+  #       min_threads: 10,
+  #       max_threads: 10,
   #       queue_size: 100
   #     )
   #     responses = Concurrent::Array.new
@@ -21,15 +21,8 @@ RSpec.describe 'Coupons', type: :request do
   #     mutex = Mutex.new
 
   #     100.times do
-        
+
   #       executor.post do
-
-  #         mutex.synchronize do
-  #           auser = create(:user)
-  #           sign_in auser
-
-  #         end
-
   #         post issue_coupons_path, params: { coupon_id: coupon.id }
   #         responses << response.status
   #       rescue StandardError => e
@@ -50,8 +43,6 @@ RSpec.describe 'Coupons', type: :request do
   #   end
   # end
 
-
-  
   describe 'POST /coupon' do
     describe 'success' do
       it 'should issue coupon' do

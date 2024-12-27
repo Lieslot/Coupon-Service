@@ -1,0 +1,6 @@
+{
+    "rubyTestExplorer.logpanel": true,
+    "solargraph.folding": true,
+    "rubyTestExplorer.testFramework": "rspec",
+    "rubyTestExplorer.debugCommand": "bundle exec rdebug-ide"
+}

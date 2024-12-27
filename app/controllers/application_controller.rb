@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-
   def exceeded_max_amount_per_user(error)
     Rails.logger.error("Coupon issue has reached to limit: #{error.message}")
     render json: { message: 'Coupon issue has reached to limit' }, status: :bad_request

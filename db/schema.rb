@@ -10,40 +10,53 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 20_241_219_062_640) do
-  create_table 'coupon_details', force: :cascade do |t|
-    t.integer 'amount'
-    t.string 'name'
-    t.integer 'max_amount_per_user'
-    t.integer 'discount_value'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.datetime 'deleted_at'
-    t.integer 'duration_day'
+ActiveRecord::Schema[7.1].define(version: 2024_12_27_053136) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "coupon_details", force: :cascade do |t|
+    t.integer "amount"
+    t.string "name"
+    t.integer "max_amount_per_user"
+    t.integer "discount_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.integer "duration_day"
   end
 
-  create_table 'coupon_wallets', force: :cascade do |t|
-    t.integer 'amount'
-    t.integer 'coupon_id'
-    t.integer 'user_id'
-    t.date 'expire_date'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.datetime 'deleted_at'
+  create_table "coupon_purchases", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "coupon_id"
+    t.string "integer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
   end
 
-  create_table 'users', force: :cascade do |t|
-    t.string 'email', default: '', null: false
-    t.string 'encrypted_password', default: '', null: false
-    t.string 'reset_password_token'
-    t.datetime 'reset_password_sent_at'
-    t.datetime 'remember_created_at'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.string 'nickname'
-    t.datetime 'deleted_at'
-    t.integer 'role'
-    t.index ['email'], name: 'index_users_on_email', unique: true
-    t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
+  create_table "coupon_wallets", force: :cascade do |t|
+    t.integer "amount"
+    t.integer "coupon_id"
+    t.integer "user_id"
+    t.date "expire_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
   end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "nickname"
+    t.datetime "deleted_at"
+    t.integer "role"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
 end
