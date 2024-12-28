@@ -16,7 +16,6 @@ class User < ApplicationRecord
 
   before_create :set_default_role
 
-
   after_initialize :set_default_role, if: :new_record?
 
   acts_as_paranoid
@@ -24,10 +23,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-
   def set_default_role
     return self.role = :admin if id == 1
 
-    self.role ||= :guest
+    self.role ||= :user
   end
 end

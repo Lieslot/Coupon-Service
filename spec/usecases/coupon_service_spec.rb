@@ -3,8 +3,10 @@ require 'rails_helper'
 RSpec.describe CouponService do
   describe '#purchase_coupon' do
     let(:users) { create_list(:user, TEST_COUNT) }
-
     TEST_COUNT = 100
+    let(:coupons) do
+      create_list(:coupon_detail, 10_000, amount: 10, duration_day: 10, max_amount_per_user: 1, discount_value: 10_000)
+    end
 
     it 'case issue coupon asynchronously' do
       coupon = create(:coupon_detail, amount: 10_000, duration_day: 10, max_amount_per_user: 1)
@@ -28,7 +30,7 @@ RSpec.describe CouponService do
       end
 
       latch.wait
-      
+
       expect(CouponWallet.count).to eq(TEST_COUNT)
       expect(CouponPurchase.where(coupon_id: coupon.id).count).to eq(TEST_COUNT)
       expect(CouponReader.new.read(coupon.id).amount).to eq(10_000 - TEST_COUNT)

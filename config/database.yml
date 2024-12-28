@@ -23,7 +23,7 @@ development:
 test:
 
   <<: *default
-  pool: 11
+  pool: 10
   database: coupon_test
 
 production:

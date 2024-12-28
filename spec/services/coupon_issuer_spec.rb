@@ -28,15 +28,14 @@ RSpec.describe CouponIssuer do
   end
 
   describe 'asynchronous test' do
+    include RSpec::Benchmark::Matchers
     let(:users) { create_list(:user, TEST_COUNT) }
 
-    TEST_COUNT = 100
+    TEST_COUNT = 200
 
     it 'case issue coupon asynchronously' do
-
       coupon = create(:coupon_detail, amount: 10_000, duration_day: 10, max_amount_per_user: 1)
       latch = Concurrent::CountDownLatch.new(TEST_COUNT)
-
 
       executor = Concurrent::ThreadPoolExecutor.new(
         min_threads: 10,
@@ -46,7 +45,6 @@ RSpec.describe CouponIssuer do
 
       users.each do |user|
         executor.post do
-
           CouponIssuer.new.issue(user.id, coupon)
         rescue StandardError => e
           Rails.logger.error(e.message)
@@ -56,6 +54,7 @@ RSpec.describe CouponIssuer do
       end
 
       latch.wait
+
       expect(CouponWallet.count).to eq(TEST_COUNT)
       expect(CouponReader.new.read(coupon.id).amount).to eq(10_000 - TEST_COUNT)
 

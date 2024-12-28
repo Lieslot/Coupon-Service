@@ -11,9 +11,8 @@ class CouponReader
     raise CouponNotFound.new(coupon_id, nil) if coupon.nil?
 
     left_amount = Rails.cache.fetch("coupon_amount_#{coupon_id}") do
-      coupon.amount - CouponPurchase.where(coupon_id: coupon.id).count
+      left_coupon_count(coupon)
     end
-
 
     CouponDto.new(coupon, left_amount)
   end
@@ -24,12 +23,18 @@ class CouponReader
     results = []
 
     coupons.each do |coupon|
-      left_amount = Rails.cache.fetch("coupon_amount_#{coupon_id}") do
-        coupon.amount - CouponPurchase.where(coupon_id: coupon.id).count
+      left_amount = Rails.cache.fetch("coupon_amount_#{coupon.id}") do
+        left_coupon_count(coupon)
       end
-      results << CouponDto.new(coupon, left_amount.value)
+      results << CouponDto.new(coupon, left_amount)
     end
 
     results
+  end
+
+  private
+
+  def left_coupon_count(coupon)
+    coupon.amount - CouponPurchase.where(coupon_id: coupon.id).count
   end
 end
